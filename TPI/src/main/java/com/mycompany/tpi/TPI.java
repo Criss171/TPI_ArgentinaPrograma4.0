@@ -5,6 +5,8 @@
 
 package com.mycompany.tpi;
 
+import java.util.Scanner;
+
 /**
  *
  * @author C
@@ -12,6 +14,13 @@ package com.mycompany.tpi;
 public class TPI {
 
     public static void main(String[] args) {
-        System.out.println("Prueba");
+        int opciones;
+        Scanner teclado = new Scanner(System.in);
+        do{
+            System.out.println("-Pronosticos deportivos-");
+            System.out.println("-3- Salir.");
+            opciones = teclado.nextInt();
+            
+        }while(opciones != 3);
     }
 }
