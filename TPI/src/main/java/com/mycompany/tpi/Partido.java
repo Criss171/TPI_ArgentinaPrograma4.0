@@ -60,7 +60,23 @@ public class Partido {
         this.golesEquipo2 = golesEquipo2;
     }
     
+    public Resultado resultado(){
+        Resultado resultado;
+        if(this.golesEquipo1 > this.golesEquipo2){
+            resultado = new Resultado(true,false,false);
+        }else{
+            resultado = new Resultado(false,true,false);
+        }
+        if(this.golesEquipo1 == this.golesEquipo2){
+            resultado = new Resultado(false,false,true);
+        }
+        return resultado;
+    }
     
+    @Override
+    public String toString(){
+        return "Partido: " + this.equipo1.getNombre() +" goles: "+this.golesEquipo1+ " vs " + this.equipo2.getNombre()+ " goles: "+this.golesEquipo2 ;
+    }
     
     
     

@@ -10,7 +10,32 @@ package com.mycompany.tpi;
  */
 public class Pronostico {
     private Partido partido;
-    private Equipo equipo;
-    private Resultado restulado;
+    private Resultado resultado;
+    
+    public Pronostico(){
+        this.partido = null;
+        this.resultado = null;
+    }
+    public Pronostico(Partido partido, Resultado resultado){
+        this.partido = partido;
+        this.resultado = resultado;
+    }
+
+    public Partido getPartido() {
+        return partido;
+    }
+
+    public Resultado getResultado() {
+        return resultado;
+    }
+
+    public void setPartido(Partido partido) {
+        this.partido = partido;
+    }
+
+    public void setResultado(Resultado resultado) {
+        this.resultado = resultado;
+    }
+    
     
 }
