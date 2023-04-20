@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * @author C
  */
 public class ConexionDB {
-    private String db = "db_tbi";
+    private String db = "db_tpi";
     private String url = "jdbc:mysql://localhost:3306/"; //servidor local en la pc en el que se ejecuta la base de datos
     private String user= "root";
     private String password = "CMysqklBasesDatos";
@@ -26,7 +26,7 @@ public class ConexionDB {
     
     }
     
-    public Connection conectar(){
+    public void conectar(){
         try{
             Class.forName(driver);
             cx = DriverManager.getConnection(url+db, user, password);
@@ -35,7 +35,6 @@ public class ConexionDB {
             System.out.println("No se conecto a la Base de datos: "+ db);
             Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return cx;    
     }
     public void desconectar(){
         try {

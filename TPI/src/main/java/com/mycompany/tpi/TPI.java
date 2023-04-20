@@ -16,6 +16,15 @@ public class TPI {
     public static void main(String[] args) {
          ConexionDB conexcion = new ConexionDB();
         conexcion.conectar();
+        Scanner teclado = new Scanner(System.in);
+        
+        System.out.println("Para desconectar apriete 3");
+        int o = teclado.nextInt();
+        if(0 == 3){
+            conexcion.desconectar();
+        }
+               
+        
         /*
         int opciones;
         Scanner teclado = new Scanner(System.in);
