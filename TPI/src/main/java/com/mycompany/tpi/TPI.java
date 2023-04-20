@@ -14,6 +14,9 @@ import java.util.Scanner;
 public class TPI {
 
     public static void main(String[] args) {
+         ConexionDB conexcion = new ConexionDB();
+        conexcion.conectar();
+        /*
         int opciones;
         Scanner teclado = new Scanner(System.in);
         do{
@@ -22,5 +25,7 @@ public class TPI {
             opciones = teclado.nextInt();
             
         }while(opciones != 3);
+        */
     }
+    
 }
