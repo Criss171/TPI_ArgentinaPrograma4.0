@@ -10,15 +10,20 @@ package com.mycompany.tpi;
  */
 public class Pronostico {
     private Partido partido;
+    private String equipo;
     private Resultado resultado;
     
     public Pronostico(){
         this.partido = null;
         this.resultado = null;
     }
-    public Pronostico(Partido partido, Resultado resultado){
+    public Pronostico(Partido partido,String equipo, Resultado resultado){
         this.partido = partido;
         this.resultado = resultado;
+    }
+    public Pronostico(int nroPartido, String equipo1, String equipo2, int fase, int ronda,String equipo, boolean equipo1Ganador, boolean equipo2Ganador, boolean empate){
+        this.partido = new Partido(nroPartido, equipo1, equipo2, 0, 0, fase, ronda);
+        this.resultado = new Resultado(equipo1Ganador, equipo2Ganador, empate);
     }
 
     public Partido getPartido() {

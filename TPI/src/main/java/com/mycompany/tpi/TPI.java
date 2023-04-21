@@ -5,6 +5,8 @@
 
 package com.mycompany.tpi;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -13,13 +15,18 @@ import java.util.Scanner;
  */
 public class TPI {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
          ConexionDB conexcion = new ConexionDB();
         conexcion.conectar();
+        ResultSet resultado;
         Scanner teclado = new Scanner(System.in);
         
         System.out.println("Para desconectar apriete 3");
         int o = teclado.nextInt();
+        
+        conexcion.consulta();
+        
+          
         if(0 == 3){
             conexcion.desconectar();
         }
