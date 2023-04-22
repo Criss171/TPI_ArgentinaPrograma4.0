@@ -21,12 +21,21 @@ public class TPI {
         ResultSet resultado;
         Scanner teclado = new Scanner(System.in);
         
+        
+        
+        resultado = conexcion.consulta("SELECT * FROM db_tpi.pronosticos;");
+        
+        try {
+            while (resultado.next()) {
+                String  equipo1 = resultado.getString("Nombre");
+                System.out.println(equipo1);
+            }
+        } catch (SQLException ex) {
+           System.out.println("error");
+        }
+        
         System.out.println("Para desconectar apriete 3");
         int o = teclado.nextInt();
-        
-        conexcion.consulta();
-        
-          
         if(0 == 3){
             conexcion.desconectar();
         }

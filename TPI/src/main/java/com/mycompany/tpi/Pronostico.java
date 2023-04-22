@@ -18,12 +18,22 @@ public class Pronostico {
         this.resultado = null;
     }
     public Pronostico(Partido partido,String equipo, Resultado resultado){
+        this.equipo = equipo;
         this.partido = partido;
         this.resultado = resultado;
     }
-    public Pronostico(int nroPartido, String equipo1, String equipo2, int fase, int ronda,String equipo, boolean equipo1Ganador, boolean equipo2Ganador, boolean empate){
+    public Pronostico(int nroPartido,  String equipo1, String equipo2, int fase, int ronda,String equipo, boolean equipo1Ganador, boolean equipo2Ganador, boolean empate){
         this.partido = new Partido(nroPartido, equipo1, equipo2, 0, 0, fase, ronda);
         this.resultado = new Resultado(equipo1Ganador, equipo2Ganador, empate);
+        this.equipo = equipo;
+    }
+
+    public void setEquipo(String equipo) {
+        this.equipo = equipo;
+    }
+
+    public String getEquipo() {
+        return equipo;
     }
 
     public Partido getPartido() {
@@ -41,6 +51,7 @@ public class Pronostico {
     public void setResultado(Resultado resultado) {
         this.resultado = resultado;
     }
+
     
     
 }

@@ -50,7 +50,11 @@ public class Participante {
     public void agregarPronostico(Pronostico pronostico){
         pronosticos.add(pronostico);
     }
-    
+
+    @Override
+    public String toString() {
+        return "Participante{" + "nombre=" + nombre + ", puntos=" + puntos + '}';
+    }
     
     
 }

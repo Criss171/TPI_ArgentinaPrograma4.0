@@ -49,30 +49,22 @@ public class ConexionDB {
             Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void  consulta(){
-        System.out.println("se inicia el metodo consulta");
+    public ResultSet consulta(String sqlConsulta){
+        
         try {
-            consulta = cx.createStatement();
-            System.out.println("1 paso valido");
+            consulta = cx.createStatement();       
         } catch (SQLException ex) {
             Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-         sqlConsulta = "SELECT * FROM db_tpi.resultados;";
+         this.sqlConsulta = sqlConsulta;
+         
         try {
-            resultado = consulta.executeQuery(sqlConsulta);
-            System.out.println("2 paso valido");
+            resultado = consulta.executeQuery(sqlConsulta);        
         } catch (SQLException ex) {
             Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        try {
-            while (resultado.next()) {
-                String  equipo1 = resultado.getString("Equipo1");
-                System.out.println(equipo1);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        return resultado;
     }
  
 }

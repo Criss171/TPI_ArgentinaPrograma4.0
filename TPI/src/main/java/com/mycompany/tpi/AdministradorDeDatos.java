@@ -14,8 +14,8 @@ public class AdministradorDeDatos {
     private ArrayList<Participante> participantes;
     private ArrayList<Partido> partidos;
     private int puntoGano;
-    private int puntoPerdio;
-    private int puntoEmpato;
+    private int puntosPerdio;
+    private int puntosEmpato;
     private int puntosAcertoRonda;
     private int puntosAcertoFace;
     
