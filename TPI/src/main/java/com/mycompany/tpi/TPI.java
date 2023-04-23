@@ -7,6 +7,7 @@ package com.mycompany.tpi;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -16,13 +17,22 @@ import java.util.Scanner;
 public class TPI {
 
     public static void main(String[] args) throws SQLException {
-         ConexionDB conexcion = new ConexionDB();
-        conexcion.conectar();
-        ResultSet resultado;
+        
+        AdministradorDeDatos administrador = new AdministradorDeDatos();
         Scanner teclado = new Scanner(System.in);
+        ArrayList<Participante> participantes;
         
         
         
+     
+        participantes = administrador.getParticipantes();
+        System.out.println(participantes);
+        
+        
+        
+        
+        
+        /*
         resultado = conexcion.consulta("SELECT * FROM db_tpi.pronosticos;");
         
         try {
@@ -39,7 +49,7 @@ public class TPI {
         if(0 == 3){
             conexcion.desconectar();
         }
-               
+           */    
         
         /*
         int opciones;
