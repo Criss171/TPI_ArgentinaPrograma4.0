@@ -62,18 +62,13 @@ public class AdministradorDeDatos {
         this.partidos.add(partido);
     }
     private void agregarParticipante(String nombre){
-        Participante participante = new Participante(nombre, 0, null);
+        Participante participante = new Participante(nombre, 0, new ArrayList<>());
         if(!participanteEnLista(nombre)){
             participantes.add(participante);
         }
     }
     
-    private void agregarPronosticoAparticipante(String nombreParticipante,int nroPartido, String equipo1,String equipo, String equipo2, int ronda, int fase, boolean equipo1Gana, boolean equipo2Gana, boolean empate){
-        Participante participante  = buscarParticipante(nombreParticipante); 
-        Pronostico pronostico = new Pronostico(nroPartido, equipo1, equipo2, ronda, fase,equipo, equipo1Gana, equipo2Gana, empate);
-        participante.agregarPronostico(pronostico);
-        
-    }
+    
     private Participante buscarParticipante(String nombre){
         Participante participante = null; 
         for(Participante p : participantes){
@@ -91,12 +86,9 @@ public class AdministradorDeDatos {
         }
         return false;
     }
-    public void actualizarPuntaje(){
-        
-    }
-    
+   
     public void cargarParticipantes(){
-        resultado = conexcion.consulta("SELECT * FROM db_tpi.pronosticos");
+        resultado = conexcion.consulta("SELECT * FROM db_tpi.pronosticos;");
         try {
             while(resultado.next()){
                 String nombre = resultado.getString("Nombre");
@@ -105,45 +97,73 @@ public class AdministradorDeDatos {
         } catch (SQLException ex) {
             Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     public void cargarPronosticos(){
-        String fase;
-        String ronda;
+        int fase;
+        int ronda;
+        int nroPronostico;
         String equipo1;
         String equipo2;
         String gana1;
         String empata;
         String gana2;
+        String equipoPronosticado;
+        boolean gana;
+        boolean pierde;
+        boolean empatan;
+        Pronostico pronostico;
         
         for(Participante p: participantes){
             String nombre = p.getNombre();
-            resultado = conexcion.consulta("SELECT * FROM db_tpi.pronosticos WHERE nombre = " + nombre + ";");
+            resultado = conexcion.consulta("SELECT * FROM db_tpi.pronosticos WHERE Nombre ="+"'"+ nombre+"'"+";");
             try {
                 while(resultado.next()){
-                    fase = resultado.getString("Fase");
-                    ronda = resultado.getString("Ronda");
+                    fase = resultado.getInt("Fase");
+                    ronda = resultado.getInt("Ronda");
                     equipo1 = resultado.getString("Equipo1");
                     equipo2 = resultado.getString("Equipo2");
                     gana1 = resultado.getString("Gana1");
-                    empata = resultado.getString("Empata");
+                    empata = resultado.getString("Empatan");
                     gana2 = resultado.getString("Gana2");
+                    nroPronostico = resultado.getInt("idPronostico");
+                    
+                    
+                    gana = deStringAboolean(gana1);
+                    pierde = deStringAboolean(gana2);
+                    empatan = deStringAboolean(empata);
+                    equipoPronosticado = equipoAlQueSeApuesta(gana1,empata,equipo1,equipo2);
+                    pronostico = new Pronostico(nroPronostico, equipo1, equipo2, fase, ronda, equipoPronosticado, gana, pierde, empatan);
+                    
+                    p.agregarPronostico(pronostico);
                     
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
+        
+        
     }
-    private String equipoAlQueSeApuesta(String gana1, String empata, String gana2, String equipo1, String equipo2){
-        if(gana1.equals("x") || empata.equals("x")){
+    private String equipoAlQueSeApuesta(String gana1, String empata, String equipo1, String equipo2){
+        if("x".equals(gana1) || "x".equals(empata)){
             return equipo1;
         }else{
             return equipo2;
         }
     }       
+    private boolean deStringAboolean(String x){
+        return "x".equals(x);
+    }
+            
     public ArrayList<Participante> getParticipantes(){
         return this.participantes;
     }
-           
+    
+     public void actualizarPuntaje(){
+        
+    }
+    
     
 }

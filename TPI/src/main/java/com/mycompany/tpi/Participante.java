@@ -16,9 +16,11 @@ public class Participante {
     private ArrayList<Pronostico> pronosticos;
 
     public Participante() {
+        this.pronosticos = new ArrayList<>();
     }
 
     public Participante(String nombre, int puntos, ArrayList<Pronostico> pronosticos) {
+        
         this.nombre = nombre;
         this.puntos = puntos;
         this.pronosticos = pronosticos;
@@ -53,7 +55,7 @@ public class Participante {
 
     @Override
     public String toString() {
-        return "Participante{ " + "nombre: " + nombre + " ,puntos: " + puntos + " }\n";
+        return "Participante{ " + "nombre: " + nombre + " ,puntos: " + puntos + " }\n" ;
     }
     
     

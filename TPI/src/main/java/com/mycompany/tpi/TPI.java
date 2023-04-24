@@ -21,12 +21,20 @@ public class TPI {
         AdministradorDeDatos administrador = new AdministradorDeDatos();
         Scanner teclado = new Scanner(System.in);
         ArrayList<Participante> participantes;
-        
-        
-        
-     
         participantes = administrador.getParticipantes();
-        System.out.println(participantes);
+        administrador.cargarParticipantes();
+        
+        administrador.cargarPronosticos();
+        
+        
+        for(Participante p: participantes){
+            System.out.println("Participante: "  + p.getNombre()+ " Puntos: " + p.getPuntos());
+            ArrayList<Pronostico> pronosticos;
+            pronosticos = p.getPronosticos();
+            for(Pronostico pron: pronosticos){
+                System.out.println(pron);
+            }
+        }
         
         
         
