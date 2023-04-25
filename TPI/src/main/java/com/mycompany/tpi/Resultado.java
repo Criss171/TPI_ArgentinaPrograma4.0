@@ -46,5 +46,15 @@ public class Resultado {
     public void setEmpate(boolean empate) {
         this.empate = empate;
     }
+
+    
+
+    
+    public boolean comparar(Resultado r) {
+        if(this.empate == r.empate && this.equipo1Ganador == r.equipo1Ganador && this.equipo2Ganador == r.equipo2Ganador){
+            return true;
+        }
+        return false;
+    }
     
 }

@@ -25,15 +25,18 @@ public class TPI {
         administrador.cargarParticipantes();
         
         administrador.cargarPronosticos();
-        
+        administrador.cargarNroParidoAPronosticos();
+        administrador.actualizarPuntaje();
         
         for(Participante p: participantes){
             System.out.println("Participante: "  + p.getNombre()+ " Puntos: " + p.getPuntos());
+            
             ArrayList<Pronostico> pronosticos;
             pronosticos = p.getPronosticos();
             for(Pronostico pron: pronosticos){
                 System.out.println(pron);
             }
+            
         }
         
         

@@ -24,6 +24,7 @@ public class AdministradorDeDatos {
     private int puntosEmpato;
     private int puntosAcertoRonda;
     private int puntosAcertoFace;
+    private int fasesTotales;
     
     public AdministradorDeDatos(){
         conexcion.conectar();
@@ -134,7 +135,6 @@ public class AdministradorDeDatos {
                     empatan = deStringAboolean(empata);
                     equipoPronosticado = equipoAlQueSeApuesta(gana1,empata,equipo1,equipo2);
                     pronostico = new Pronostico(nroPronostico, equipo1, equipo2, fase, ronda, equipoPronosticado, gana, pierde, empatan);
-                    
                     p.agregarPronostico(pronostico);
                     
                 }
@@ -162,8 +162,103 @@ public class AdministradorDeDatos {
     }
     
      public void actualizarPuntaje(){
+         ArrayList<Pronostico> pronosticos;
+         int puntosTotales;
+        for(Participante p: participantes){
+            puntosTotales = 0; 
+            pronosticos = p.getPronosticos();
+            for(Pronostico pron: pronosticos){
+                puntosTotales = puntosTotales+ puntosPorPronostico(pron);
+
+            }
+            p.setPuntos(puntosTotales);
+        }
+    }
+     
+    public void cargarNroParidoAPronosticos(){
+        ArrayList<Pronostico> pronosticos;
+        for(Participante p : participantes){
+            pronosticos = p.getPronosticos();
+            for(Pronostico pron : pronosticos){
+                cargarNroPartidoEnPronostico(pron);
+            }
+        }
+            
+    }
+    private void cargarNroPartidoEnPronostico(Pronostico pronostico){
+ 
+        Partido p = pronostico.getPartido();
+        resultado  = conexcion.consulta("SELECT * FROM db_tpi.resultados WHERE Fase = " +
+                                        p.getFase() +" AND Ronda = " + p.getRonda() +
+                                        " AND Equipo1 = " + "'"+ p.getEquipo1() + "'"+ " AND Equipo2 = " +  "'"+ p.getEquipo2() + "'"+ ";");
+        
+        
+        try {
+            while(resultado.next()){
+                  p.setNroPartido(resultado.getInt("idResultado"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
     
+    private int puntosPorPronostico(Pronostico p ){
+        int puntos = 0;
+        Partido partido = p.getPartido();
+        Resultado r = null;
+        int nroEquipoQuSeApuesta=0;
+        resultado = conexcion.consulta("SELECT * FROM db_tpi.resultados WHERE idResultado =" + partido.getNroPartido()+ "\n");
+        try {
+            while(resultado.next()){
+               r =  resultadoDePartido(resultado.getInt("Cant. Goles1"), resultado.getInt("Cant. Goles2")); 
+               if(resultado.getString("Equipo1").equals(p.getEquipo())){
+                   nroEquipoQuSeApuesta = 1;
+               }else{
+                   nroEquipoQuSeApuesta = 2;
+               }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(r.comparar(p.getResultado())){
+            if(nroEquipoQuSeApuesta == 1){
+                if(r.getEquipo1Ganador()){
+                    puntos  = this.puntoGano;
+                }else{
+                    if(r.getEmpate()){
+                        puntos = this.puntosEmpato;
+                    }else{
+                        puntos = this.puntosPerdio;
+                    }
+                }
+            }else{
+                if(r.getEquipo2Ganador()){
+                    puntos  = this.puntoGano;
+                }else{
+                    if(r.getEmpate()){
+                        puntos = this.puntosEmpato;
+                    }else{
+                        puntos = this.puntosPerdio;
+                    }
+                }
+            }
+        }
+       return puntos;
+    }
+    private Resultado resultadoDePartido(int equipo1, int equipo2){
+        Resultado r;
+        if(equipo1 == equipo2){
+            r = new Resultado(false, false, true);
+        }else{
+            if(equipo1 > equipo2){
+                r = new Resultado(true, false, false);
+            }else{
+                r = new Resultado(false, true, false);
+            }
+               
+        }
+       return r;
+    }
 }

@@ -60,6 +60,7 @@ public class Pronostico {
     public String toString() {
         return "    Pronostico \n"
                 +"      NroPronostico: "+ nroPronostico + "\n"
+                +"      NroPartido: " + partido.getNroPartido() + "\n"
                 +"      EquipoAlQuseApuesta: " + equipo + "\n"
                 +"      Partido: "+ partido.getEquipo1() +" vs " + partido.getEquipo2()+ "\n"
                 +"      Resultado: "+ " GanaEqupo1: "+ resultado.getEquipo1Ganador() +" ganaEquipo2 "+ resultado.getEquipo2Ganador()+ " Empatan " +resultado.getEmpate()+   "\n";
