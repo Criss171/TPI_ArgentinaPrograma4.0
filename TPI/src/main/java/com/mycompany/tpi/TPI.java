@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class TPI {
 
     public static void main(String[] args) throws SQLException {
-        
+        int nroParticipante = 0;
         AdministradorDeDatos administrador = new AdministradorDeDatos();
         Scanner teclado = new Scanner(System.in);
         ArrayList<Participante> participantes;
@@ -28,50 +28,27 @@ public class TPI {
         administrador.cargarNroParidoAPronosticos();
         administrador.actualizarPuntaje();
         
-        for(Participante p: participantes){
-            System.out.println("Participante: "  + p.getNombre()+ " Puntos: " + p.getPuntos());
-            
-            ArrayList<Pronostico> pronosticos;
-            pronosticos = p.getPronosticos();
-            for(Pronostico pron: pronosticos){
-                System.out.println(pron);
-            }
-            
-        }
         
-        
-        
-        
-        
-        /*
-        resultado = conexcion.consulta("SELECT * FROM db_tpi.pronosticos;");
-        
-        try {
-            while (resultado.next()) {
-                String  equipo1 = resultado.getString("Nombre");
-                System.out.println(equipo1);
-            }
-        } catch (SQLException ex) {
-           System.out.println("error");
-        }
-        
-        System.out.println("Para desconectar apriete 3");
-        int o = teclado.nextInt();
-        if(0 == 3){
-            conexcion.desconectar();
-        }
-           */    
-        
-        /*
+    
         int opciones;
-        Scanner teclado = new Scanner(System.in);
         do{
+            System.out.println("------------------------------------------------------------");
             System.out.println("-Pronosticos deportivos-");
-            System.out.println("-3- Salir.");
+            System.out.println("-1- Ver lista de ganadores.");
+            System.out.println("-2- Salir.");
+            System.out.println("------------------------------------------------------------");
             opciones = teclado.nextInt();
-            
-        }while(opciones != 3);
-        */
+            if(opciones == 1){
+                System.out.println("-------------------Ganadores---------------------------");
+                    for(Participante p: participantes){
+                        ArrayList<Pronostico> pronosticos;
+                        pronosticos = p.getPronosticos();
+                        System.out.println((nroParticipante +=1) + "- Participante: "  + p.getNombre()+ " Puntos: " + p.getPuntos() + " Total pronosticos: "+ pronosticos.size());     
+                    }
+                System.out.println("---------------------------------------------------------");
+            }
+        }while(opciones != 2);
+        administrador.terminarAdministracion();
     }
     
 }

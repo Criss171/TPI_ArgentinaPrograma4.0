@@ -31,8 +31,8 @@ public class AdministradorDeDatos {
         this.participantes = new ArrayList<Participante>();
         this.partidos = new ArrayList<Partido>();
         this.puntoGano = 1;
-        this.puntosPerdio = 1;
-        this.puntosEmpato = 1;
+        this.puntosPerdio = 0;
+        this.puntosEmpato = 0;
          this.puntosAcertoRonda = 1;
         this.puntosAcertoFace = 1;
        
@@ -169,6 +169,7 @@ public class AdministradorDeDatos {
             pronosticos = p.getPronosticos();
             for(Pronostico pron: pronosticos){
                 puntosTotales = puntosTotales+ puntosPorPronostico(pron);
+                
 
             }
             p.setPuntos(puntosTotales);
@@ -245,6 +246,7 @@ public class AdministradorDeDatos {
                 }
             }
         }
+        
        return puntos;
     }
     private Resultado resultadoDePartido(int equipo1, int equipo2){
@@ -260,5 +262,9 @@ public class AdministradorDeDatos {
                
         }
        return r;
+    }
+    
+    public void terminarAdministracion(){
+        conexcion.desconectar();
     }
 }
