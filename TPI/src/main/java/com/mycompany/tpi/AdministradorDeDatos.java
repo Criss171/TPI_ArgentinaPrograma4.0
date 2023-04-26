@@ -24,18 +24,39 @@ public class AdministradorDeDatos {
     private int puntosEmpato;
     private int puntosAcertoRonda;
     private int puntosAcertoFace;
-    private int fasesTotales;
+    private ArrayList<Integer> fasesTotales;
     
     public AdministradorDeDatos(){
         conexcion.conectar();
         this.participantes = new ArrayList<Participante>();
         this.partidos = new ArrayList<Partido>();
+        this.fasesTotales = new ArrayList<Integer>();
         this.puntoGano = 1;
-        this.puntosPerdio = 0;
-        this.puntosEmpato = 0;
+        this.puntosPerdio = 1;
+        this.puntosEmpato = 1;
          this.puntosAcertoRonda = 1;
         this.puntosAcertoFace = 1;
        
+    }
+
+    public int getPuntoGano() {
+        return puntoGano;
+    }
+
+    public int getPuntosPerdio() {
+        return puntosPerdio;
+    }
+
+    public int getPuntosEmpato() {
+        return puntosEmpato;
+    }
+
+    public int getPuntosAcertoRonda() {
+        return puntosAcertoRonda;
+    }
+
+    public int getPuntosAcertoFace() {
+        return puntosAcertoFace;
     }
 
     public void setPuntoGano(int puntoGano) {
@@ -98,6 +119,7 @@ public class AdministradorDeDatos {
         } catch (SQLException ex) {
             Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        fasesTotales();
         
     }
     public void cargarPronosticos(){
@@ -164,12 +186,16 @@ public class AdministradorDeDatos {
      public void actualizarPuntaje(){
          ArrayList<Pronostico> pronosticos;
          int puntosTotales;
+         int auxiliar;
         for(Participante p: participantes){
             puntosTotales = 0; 
             pronosticos = p.getPronosticos();
             for(Pronostico pron: pronosticos){
-                puntosTotales = puntosTotales+ puntosPorPronostico(pron);
-                
+                auxiliar = puntosPorPronostico(pron);
+                if(auxiliar !=this.puntosPerdio  || auxiliar > 0){
+                    pron.setAcertado(true);
+                }
+                puntosTotales = puntosTotales+ auxiliar;
 
             }
             p.setPuntos(puntosTotales);
@@ -230,8 +256,6 @@ public class AdministradorDeDatos {
                 }else{
                     if(r.getEmpate()){
                         puntos = this.puntosEmpato;
-                    }else{
-                        puntos = this.puntosPerdio;
                     }
                 }
             }else{
@@ -240,11 +264,11 @@ public class AdministradorDeDatos {
                 }else{
                     if(r.getEmpate()){
                         puntos = this.puntosEmpato;
-                    }else{
-                        puntos = this.puntosPerdio;
                     }
                 }
             }
+        }else{
+            puntos  = this.puntosPerdio;
         }
         
        return puntos;
@@ -263,6 +287,25 @@ public class AdministradorDeDatos {
         }
        return r;
     }
+    private void fasesTotales(){
+        resultado = conexcion.consulta("SELECT * FROM db_tpi.resultados;");
+        Integer i= null;
+        try {
+            while(resultado.next()){
+                try {
+                    i = resultado.getInt("Fase");
+                } catch (SQLException ex) {
+                    Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if(!fasesTotales.contains(i)){
+                    fasesTotales.add(i);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     
     public void terminarAdministracion(){
         conexcion.desconectar();

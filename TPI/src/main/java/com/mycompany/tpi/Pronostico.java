@@ -13,25 +13,37 @@ public class Pronostico {
     private String equipo;
     private Resultado resultado;
     private int nroPronostico;
+    private boolean acertado;
     
     public Pronostico(){
         this.partido = null;
         this.resultado = null;
         this.equipo =  "";
+        this.acertado = false;
     }
     public Pronostico(int nroPronostico, Partido partido,String equipo, Resultado resultado){
         this.equipo = equipo;
         this.partido = partido;
         this.resultado = resultado;
         this.nroPronostico = nroPronostico;
+        this.acertado =  false;
     }
     public Pronostico(int nroPronostico,  String equipo1, String equipo2, int fase, int ronda,String equipo, boolean equipo1Ganador, boolean equipo2Ganador, boolean empate){
         this.partido = new Partido(0, equipo1, equipo2, 0, 0, fase, ronda);
         this.resultado = new Resultado(equipo1Ganador, equipo2Ganador, empate);
         this.equipo = equipo;
         this.nroPronostico = nroPronostico;
+        this.acertado = false;
     }
 
+    public boolean getAcertado() {
+        return acertado;
+    }
+
+    public void setAcertado(boolean acertado) {
+        this.acertado = acertado;
+    }
+    
     public void setEquipo(String equipo) {
         this.equipo = equipo;
     }

@@ -17,6 +17,7 @@ import java.util.Scanner;
 public class TPI {
 
     public static void main(String[] args) throws SQLException {
+        
         int nroParticipante = 0;
         AdministradorDeDatos administrador = new AdministradorDeDatos();
         Scanner teclado = new Scanner(System.in);
@@ -28,18 +29,29 @@ public class TPI {
         administrador.cargarNroParidoAPronosticos();
         administrador.actualizarPuntaje();
         
+        Configuracion configuracion = new Configuracion(administrador);
+        
         
     
         int opciones;
         do{
+            
             System.out.println("------------------------------------------------------------");
             System.out.println("-Pronosticos deportivos-");
             System.out.println("-1- Ver lista de ganadores.");
-            System.out.println("-2- Salir.");
+            System.out.println("-2- Cargar archivo de configuracion.");
+            System.out.println(configuracion.configuracionActual());
+            System.out.println("-3- Salir.");
             System.out.println("------------------------------------------------------------");
             opciones = teclado.nextInt();
             if(opciones == 1){
+                administrador.actualizarPuntaje();
                 System.out.println("-------------------Ganadores---------------------------");
+                System.out.println("------[Gana:"+administrador.getPuntoGano()+ "]"
+                        +"-[Pierde:" + administrador.getPuntosPerdio() + "]"
+                        +"-[Empata:" + administrador.getPuntosEmpato()+"]"
+                        +"-[BonusFase:" + administrador.getPuntosAcertoFace() + "]"
+                        +"-[BonusRonda:" + administrador.getPuntosAcertoFace() + "]");
                     for(Participante p: participantes){
                         ArrayList<Pronostico> pronosticos;
                         pronosticos = p.getPronosticos();
@@ -47,7 +59,10 @@ public class TPI {
                     }
                 System.out.println("---------------------------------------------------------");
             }
-        }while(opciones != 2);
+            if(opciones ==2){
+                configuracion.actualizarCofiguracion();
+            }
+        }while(opciones != 3);
         administrador.terminarAdministracion();
     }
     
