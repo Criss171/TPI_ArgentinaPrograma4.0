@@ -52,7 +52,9 @@ public class Participante {
     public void agregarPronostico(Pronostico pronostico){
         pronosticos.add(pronostico);
     }
-
+    public void sumarPuntaje(int puntaje){
+        this.puntos = this.puntos + puntaje;
+    }
     @Override
     public String toString() {
         return "Participante{ " + "nombre: " + nombre + " ,puntos: " + puntos + " }\n" ;

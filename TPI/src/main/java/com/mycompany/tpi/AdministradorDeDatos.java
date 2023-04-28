@@ -31,10 +31,10 @@ public class AdministradorDeDatos {
         this.participantes = new ArrayList<Participante>();
         this.partidos = new ArrayList<Partido>();
         this.fasesTotales = new ArrayList<Integer>();
-        this.puntoGano = 1;
-        this.puntosPerdio = 1;
-        this.puntosEmpato = 1;
-         this.puntosAcertoRonda = 1;
+        this.puntoGano = 0;
+        this.puntosPerdio = 0;
+        this.puntosEmpato = 0;
+         this.puntosAcertoRonda = 0;
         this.puntosAcertoFace = 1;
        
     }
@@ -199,7 +199,10 @@ public class AdministradorDeDatos {
 
             }
             p.setPuntos(puntosTotales);
+            
         }
+        puntosPorFaceAcertada();
+        puntosPorRondaAcertada();
     }
      
     public void cargarNroParidoAPronosticos(){
@@ -305,7 +308,100 @@ public class AdministradorDeDatos {
             Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    
+    
+    private void puntosPorFaceAcertada(){
+        int partidos;
+        int aciertosTotalesPorFase=0;
+        for(Integer i: fasesTotales){
+             partidos = partidosTotalesDeUnaFase(i);
+             for(Participante p: participantes){
+                 for(Pronostico pro: p.getPronosticos()){
+                     if(pro.getAcertado() && pro.getPartido().getFase() == i){
+                         aciertosTotalesPorFase += 1;
+                     }    
+                 }
+                 if(aciertosTotalesPorFase == partidos){
+                     p.sumarPuntaje(this.puntosAcertoFace);
+                 }
+                 aciertosTotalesPorFase =0 ;
+             }
+             
+        }
+    }
+    private void puntosPorRondaAcertada(){
+        int rondasTotales = 0;
+        int partidosDeUnaRonda =0;
+        int puntosPorRonda=0;
+        for(Integer i: fasesTotales){
+            rondasTotales = rondasTotalesDeUnaFase(i);
+            for(Participante p: participantes){
+                while(rondasTotales >0){
+                    partidosDeUnaRonda =partidosTotalesDeUnaRonda(i, rondasTotales);
+                    for(Pronostico pron: p.getPronosticos()){
+                        System.out.println(pron.getPartido().getFase() +"_"+ i+"_"+ pron.getPartido().getRonda() +"_"+ partidosDeUnaRonda +"_"+ pron.getAcertado() );
+                        if(pron.getPartido().getFase() == i && pron.getPartido().getRonda() == partidosDeUnaRonda && pron.getAcertado()){
+                            puntosPorRonda +=1;
+                        }
+                        
+                    }
+                    if(puntosPorRonda == partidosDeUnaRonda){
+                        System.out.println("Acerto una ronda");
+                        p.sumarPuntaje(this.puntosAcertoRonda);
+                    }else{
+                        System.out.println("no acerto una ronda" );
+                    }
+                    
+                    rondasTotales -=1;
+                }
+                puntosPorRonda=0;
+                rondasTotales = rondasTotalesDeUnaFase(i);
+            }  
+        }
+    }
+    private int partidosTotalesDeUnaRonda( int fase, int ronda){
+        int partidosTotales =0;
+        resultado = conexcion.consulta( "SELECT COUNT(*) FROM db_tpi.resultados WHERE Fase = "+ fase +" AND Ronda = " + ronda + " ;");
+        try {
+            while(resultado.next()){
+                partidosTotales= resultado.getInt("COUNT(*)");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return partidosTotales;
+    }
+    private int rondasTotalesDeUnaFase(int fase){
+        int rondasTotales =0 ;
+        int rondaActual=0;
+        resultado = conexcion.consulta("SELECT* FROM db_tpi.resultados WHERE Fase = " + fase + "  ORDER BY Ronda;");
+        try {
+            while(resultado.next()){
+                if(rondaActual != resultado.getInt("Ronda")){
+                    rondaActual = resultado.getInt("Ronda");
+                    rondasTotales += 1;
+                }
+                
+            }
+        } catch (SQLException ex) {            
+            Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rondasTotales;
+    }
+    private int partidosTotalesDeUnaFase(int fase){
+        int partidosTotales =0;
+        resultado = conexcion.consulta("SELECT COUNT(*) FROM db_tpi.resultados WHERE Fase ="+ fase +";");
+        try {
+            while(resultado.next()){
+                partidosTotales = resultado.getInt("COUNT(*)");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministradorDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return partidosTotales;
+    }
+    
     
     public void terminarAdministracion(){
         conexcion.desconectar();

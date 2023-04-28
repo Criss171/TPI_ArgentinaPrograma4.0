@@ -51,7 +51,7 @@ public class TPI {
                         +"-[Pierde:" + administrador.getPuntosPerdio() + "]"
                         +"-[Empata:" + administrador.getPuntosEmpato()+"]"
                         +"-[BonusFase:" + administrador.getPuntosAcertoFace() + "]"
-                        +"-[BonusRonda:" + administrador.getPuntosAcertoFace() + "]");
+                        +"-[BonusRonda:" + administrador.getPuntosAcertoRonda()+ "]");
                     for(Participante p: participantes){
                         ArrayList<Pronostico> pronosticos;
                         pronosticos = p.getPronosticos();
