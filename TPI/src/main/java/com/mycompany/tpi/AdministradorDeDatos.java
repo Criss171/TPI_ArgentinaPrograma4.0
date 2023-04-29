@@ -331,35 +331,34 @@ public class AdministradorDeDatos {
         }
     }
     private void puntosPorRondaAcertada(){
-        int rondasTotales = 0;
-        int partidosDeUnaRonda =0;
-        int puntosPorRonda=0;
-        for(Integer i: fasesTotales){
-            rondasTotales = rondasTotalesDeUnaFase(i);
-            for(Participante p: participantes){
-                while(rondasTotales >0){
-                    partidosDeUnaRonda =partidosTotalesDeUnaRonda(i, rondasTotales);
-                    for(Pronostico pron: p.getPronosticos()){
-                        System.out.println(pron.getPartido().getFase() +"_"+ i+"_"+ pron.getPartido().getRonda() +"_"+ partidosDeUnaRonda +"_"+ pron.getAcertado() );
-                        if(pron.getPartido().getFase() == i && pron.getPartido().getRonda() == partidosDeUnaRonda && pron.getAcertado()){
-                            puntosPorRonda +=1;
-                        }
+        int rondasDeLaFase =0;
+        int partidoDeUnaRonda = 0;
+        for(Participante p: participantes){
+            
+            for(Integer i: fasesTotales){
+                rondasDeLaFase = rondasTotalesDeUnaFase(i);
+                for(int r = 1; r<= rondasDeLaFase; r++){
+                    partidoDeUnaRonda = partidosTotalesDeUnaRonda(i,r);
+                    
+                
+                    if(cantidadPronosticosAcertadosPorFaseYronda(p,i, r) == partidoDeUnaRonda){
+                        p.sumarPuntaje(this.puntosAcertoRonda);
                         
                     }
-                    if(puntosPorRonda == partidosDeUnaRonda){
-                        System.out.println("Acerto una ronda");
-                        p.sumarPuntaje(this.puntosAcertoRonda);
-                    }else{
-                        System.out.println("no acerto una ronda" );
-                    }
-                    
-                    rondasTotales -=1;
                 }
-                puntosPorRonda=0;
-                rondasTotales = rondasTotalesDeUnaFase(i);
-            }  
+            }
         }
     }
+    private int cantidadPronosticosAcertadosPorFaseYronda(Participante p, int fase, int ronda){
+        int resultado = 0;
+        for(Pronostico pron: p.getPronosticos()){
+            if(pron.getPartido().getFase() == fase && pron.getPartido().getRonda() == ronda && pron.getAcertado()){
+                resultado++;
+            }
+        }
+        return resultado; 
+    }
+    
     private int partidosTotalesDeUnaRonda( int fase, int ronda){
         int partidosTotales =0;
         resultado = conexcion.consulta( "SELECT COUNT(*) FROM db_tpi.resultados WHERE Fase = "+ fase +" AND Ronda = " + ronda + " ;");
@@ -372,7 +371,7 @@ public class AdministradorDeDatos {
         }
         return partidosTotales;
     }
-    private int rondasTotalesDeUnaFase(int fase){
+    public int rondasTotalesDeUnaFase(int fase){
         int rondasTotales =0 ;
         int rondaActual=0;
         resultado = conexcion.consulta("SELECT* FROM db_tpi.resultados WHERE Fase = " + fase + "  ORDER BY Ronda;");
